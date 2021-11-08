@@ -44,7 +44,9 @@ module.exports = (file, api, options) => {
     .find(j.ExpressionStatement, {
       expression: {
         callee: {
-          type: "MemberExpression"
+          type: "MemberExpression",
+          object: { name: "Object" },
+          property: { name: "assign" }
         },
         type: "CallExpression"
       }
