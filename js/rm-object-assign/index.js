@@ -50,7 +50,7 @@ module.exports = (file, api, options) => {
       }
     })
     .forEach(path => j(path)
-        .filter((pathB) => typeof pathB.value.expression !== 'undefined' && typeofpathB.value.expression.arguments !== 'undefined' && typeof pathB.value.expression.arguments[0] !== 'undefined' && pathB.value.expression.arguments[0].type === "Identifier")
+        .filter((pathB) => typeof pathB.value.expression !== 'undefined' && typeof pathB.value.expression.arguments !== 'undefined' && typeof pathB.value.expression.arguments[0] !== 'undefined' && pathB.value.expression.arguments[0].type === "Identifier")
         .forEach(function (pathB) {
           const identifierName = pathB.value.expression.arguments[0].name;
           const [identifierNode, ...remNodes] = pathB.value.expression.arguments;
