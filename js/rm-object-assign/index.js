@@ -3,60 +3,33 @@ module.exports = (file, api, options) => {
   const printOptions = options.printOptions || { quote: "single" };
   const root = j(file.source);
 
-  const rmObjectAssignCall = (path) => j(path).replaceWith(
+  const rmObjectAssignCall = (path) =>
+    j(path).replaceWith(
       j.objectExpression(
-        path.value.arguments.reduce((allProperties, next) => {
-          const { comments, ...argument } = next;
-          if (argument.type === "ObjectExpression") {
-            const { properties } = argument;
-            // Copy comments.
-            if (properties.length > 0 && comments && comments.length > 0) {
-              properties[0].comments = [...(properties[0].comments || []), ...(comments || [])];
-            }
-            return [...allProperties, ...properties];
-          }
-
-          return [...allProperties, { ...j.spreadProperty(argument), comments }];
-        }, [])
+        path.value.arguments.reduce(
+          (allProperties, next) =>
+            next.type === "ObjectExpression"
+              ? [...allProperties, ...next.properties]
+              : [...allProperties, { ...j.spreadProperty(next) }],
+          []
+        )
       )
     );
 
-  // Replace all Object.assign({ spec, ...}) as function arguments
   root
     .find(j.CallExpression, {
-      type: "CallExpression",
       callee: {
-        type: "Identifier"
+        type: "MemberExpression",
+        object: { name: "Object" },
+        property: { name: "assign" }
       }
     })
-    .forEach(path => j(path)
-        .find(j.CallExpression, {
-          callee: {
-            type: "MemberExpression",
-            object: { name: "Object" },
-            property: { name: "assign" }
-          }
-        })
-        .forEach(rmObjectAssignCall));
-
-  // Replace all Object.assign(...) assigning to an existing object reference
-  root
-    .find(j.ExpressionStatement, {
-      expression: {
-        callee: {
-          type: "MemberExpression",
-          object: { name: "Object" },
-          property: { name: "assign" }
-        },
-        type: "CallExpression"
-      }
-    })
-    .forEach(path => j(path)
-        .filter((pathB) => typeof pathB.value.expression !== 'undefined' && typeof pathB.value.expression.arguments !== 'undefined' && typeof pathB.value.expression.arguments[0] !== 'undefined' && pathB.value.expression.arguments[0].type === "Identifier")
-        .forEach(function (pathB) {
-          const identifierName = pathB.value.expression.arguments[0].name;
-          const [identifierNode, ...remNodes] = pathB.value.expression.arguments;
-          j(pathB).replaceWith(
+    .forEach((path) => {
+      if (path.parentPath.value.type === "ExpressionStatement") {
+        if (path.value.arguments[0].type === "Identifier") {
+          const identifierName = path.value.arguments[0].name;
+          const [identifierNode, ...remNodes] = path.value.arguments;
+          j(path).replaceWith(
             j.expressionStatement(
               j.assignmentExpression(
                 "=",
@@ -73,26 +46,11 @@ module.exports = (file, api, options) => {
               )
             )
           );
-        }));
-
-  // Replace all Object.assign(...) being assigned to a variable
-  root.find(j.VariableDeclarator).forEach(path => j(path)
-      .find(j.CallExpression, {
-        callee: { object: { name: "Object" }, property: { name: "assign" } },
-        arguments: [{ type: "ObjectExpression" }]
-      })
-      .forEach(rmObjectAssignCall));
-
-  // Replace all Object.assign(...) being returned
-  root.find(j.ReturnStatement).forEach(path => j(path)
-      .find(j.CallExpression, {
-        callee: {
-          type: "MemberExpression",
-          object: { name: "Object" },
-          property: { name: "assign" }
         }
-      })
-      .forEach(rmObjectAssignCall));
+      } else {
+        rmObjectAssignCall(path);
+      }
+    });
 
   return root.toSource(printOptions);
 };
