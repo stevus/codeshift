@@ -1,3 +1,5 @@
 - https://npmdoc.github.io/node-npmdoc-jscodeshift/build/apidoc.html
 - https://astexplorer.net/
+- https://glebbahmutov.com/blog/jscodeshift-example/
+- https://github.com/benjamn/ast-types/blob/dfb7b2e00b6fbf6347eafd09c3c3d88963921d73/def/core.ts
 - https://doc.esdoc.org/github.com/mason-lang/esast/
