@@ -8,10 +8,15 @@
 Run:
 
 ```
-// codeshift all proptypes out of the React.createClass object
-
-npm i --save react@15.5 react-dom@15.5
+// Install prop-types
 npm i --save prop-types@15.5.7
 
 // Run the react-codemod proptypes codemod
+jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/React-PropTypes-to-prop-types.js
+
+// codeshift all proptypes out of the React.createClass object
+jscodeshift -t ~/stevus/codeshift/js/upgrade-react-15.0-to-15.5/MovePropTypes.js
+
+// Install React 15.5
+npm i --save react@15.5 react-dom@15.5
 ```
