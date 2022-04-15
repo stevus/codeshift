@@ -11,6 +11,9 @@ Run:
 npm i --save react@16.14.0 react-dom@16.14.0
 
 // Run codemod to remove "react/lib/update" npm module
-
 // Run codemod to transform "react/lib/update" callsites to object spread
+jscodeshift -t ~/stevus/codeshift/js/flux-react-lib-update-to-object-spread/index.js
+
+// Rename unsafe React lifecycle methods
+jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/rename-unsafe-lifecycles.js
 ```

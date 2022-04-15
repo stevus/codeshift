@@ -19,4 +19,7 @@ jscodeshift -t ~/stevus/codeshift/js/upgrade-react-15.0-to-15.5/MovePropTypes.js
 
 // Install React 15.5
 npm i --save react@15.5 react-dom@15.5
+
+// codeshift to migrate from React.createClass
+jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/class.js
 ```

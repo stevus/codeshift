@@ -4,26 +4,6 @@ module.exports = (file, api, options) => {
   const root = j(file.source);
 
   root
-    .find(j.CallExpression)
-    .filter((path) => {
-      return (
-        path.value.type === "CallExpression" &&
-        path.value.callee.type === "Identifier" &&
-        path.value.callee.name === "require" &&
-        path.value.arguments[0].type === "Literal" &&
-        path.value.arguments[0].value === "react/lib/update"
-      );
-    })
-    .forEach((path) => j(path.parent).remove());
-
-  return root.toSource(printOptions);
-};
-module.exports = (file, api, options) => {
-  const j = api.jscodeshift;
-  const printOptions = options.printOptions || { quote: "single" };
-  const root = j(file.source);
-
-  root
     .find(j.CallExpression, {
       callee: {
         type: "Identifier",
