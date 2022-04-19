@@ -5,10 +5,43 @@
 
 ## Process
 
-Run:
+### Converting "react/lib/cx" to classnames (if necessary)
 
 ```
+// https://www.npmjs.com/package/classnames
+ag "react/lib/cx" .
+grep "classnames" package.json
+npm i --save classnames@2.2.3
+
+jscodeshift -t ~/stevus/codeshift/js/upgrade-react-0.13.3-to-0.14/ConvertReactLibCx.js .
+```
+
+### Converting "react/lib/keyMirror" to classnames (if necessary)
+
+```
+ag "react/lib/keyMirror" .
+grep "keymirror" package.json
+npm i --save keymirror@0.1.1
+
+jscodeshift -t ~/stevus/codeshift/js/upgrade-react-0.13.3-to-0.14/ConvertReactLibKeymirror.js .
+```
+
+### Convert any React.createClass from being exported directly
+```
+i.e.
+module.exports = React.createClass({...})
+```
+
+### Upgrading React
+
+```
+// Remove any `window.React = React` in the main application JS file
+
 jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/react-to-react-dom.js .
+
+jscodeshift -t ~/stevus/codeshift/js/upgrade-react-0.13.3-to-0.14/ConvertFindDOMNode.js .
+
+// Add in ReactDOM require in all files changed from `ConvertFindDOMNode`
 
 npm i --save react@0.14.0 react-dom@0.14.0
 ```
