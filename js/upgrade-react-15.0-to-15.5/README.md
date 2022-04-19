@@ -5,21 +5,26 @@
 
 ## Process
 
-Run:
+### Upgrading React
 
 ```
 // Install prop-types
 npm i --save prop-types@15.5.7
 
-// Run the react-codemod proptypes codemod
-jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/React-PropTypes-to-prop-types.js
-
-// codeshift all proptypes out of the React.createClass object
-jscodeshift -t ~/stevus/codeshift/js/upgrade-react-15.0-to-15.5/MovePropTypes.js
-
 // Install React 15.5
 npm i --save react@15.5 react-dom@15.5
 
+// Run the react-codemod proptypes codemod
+jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/React-PropTypes-to-prop-types.js .
+
+// codeshift all proptypes out of the React.createClass object
+jscodeshift -t ~/stevus/codeshift/js/upgrade-react-15.0-to-15.5/MovePropTypes.js .
+
+// Convert PureRenderMixin to `shouldComponentUpdate` (if necessary)
+jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/pure-render-mixin.js .
+
 // codeshift to migrate from React.createClass
-jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/class.js
+jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/class.js .
+
+// Remove all `shouldComponentUpdate` call sites added by `pure-render-mixin` and convert those components to `React.PureComponent`
 ```

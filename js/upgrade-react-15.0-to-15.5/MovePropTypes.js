@@ -23,11 +23,28 @@ module.exports = (file, api, options) => {
           reactCreateClassPath = path.parentPath;
         });
 
-      if(typeof reactCreateClassPath === 'undefined')
-        return
+      if (typeof reactCreateClassPath === "undefined") return;
+
+      if (
+        typeof reactCreateClassPath.value === "undefined" ||
+        typeof reactCreateClassPath.value.id === "undefined"
+      ) {
+        console.warn(
+          `Found createClass but was not attached to an identifier @ "${file.path}"`
+        );
+        return;
+      }
 
       const reactComponentIdentifierName = reactCreateClassPath.value.id.name;
       let propTypesObjectExpression;
+
+      let propTypesObjectExpressions = j(reactCreateClassPath)
+        .find(j.ObjectExpression)
+        .filter((path) => path.parent.parent.value.type === "ObjectExpression")
+        .forEach((path) => {
+          propTypesObjectExpression = path.value;
+        });
+
       j(reactCreateClassPath).forEach((x) => {
         j(x)
           .find(j.Property, {
@@ -36,36 +53,18 @@ module.exports = (file, api, options) => {
               name: "propTypes",
             },
           })
-          .forEach((xx) => {
-            const properties = [];
-            j(xx)
-              .find(j.Property)
-              .forEach((xxx) => {
-
-                if(typeof xxx.value.value.object === 'undefined')
-                  return
-
-                // Build the `propTypes` object to copy over
-                properties.push(
-                  j.property(
-                    "init",
-                    j.identifier(xxx.value.key.name),
-                    j.memberExpression(
-                      j.identifier(xxx.value.value.object.name),
-                      j.identifier(xxx.value.value.property.name),
-                      false
-                    )
-                  )
-                );
-              });
-
-            propTypesObjectExpression = j.objectExpression(properties);
+          .forEach(path => {
+            path.parentPath.value.filter(property =>
+              property.key.name === 'propTypes'
+            )
+            .forEach(property => {
+              propTypesObjectExpression = property.value;
+            })
           })
           .remove(); // Remove `propTypes` from the `React.createClass` object
       });
 
-      if(typeof propTypesObjectExpression === 'undefined')
-        return
+      if (typeof propTypesObjectExpression === "undefined") return;
 
       const reactComponentAssignment = j.expressionStatement(
         j.assignmentExpression(
@@ -79,6 +78,7 @@ module.exports = (file, api, options) => {
       );
 
       j(reactCreateClassPath.parent).insertAfter(reactComponentAssignment);
+
     })
     .toSource(printOptions);
 };
