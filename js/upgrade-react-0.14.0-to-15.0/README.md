@@ -5,7 +5,7 @@
 
 ## Process
 
-Run:
+### Upgrading React
 
 ```
 npm i --save react@15.0 react-dom@15.0
