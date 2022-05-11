@@ -2,6 +2,10 @@ Basically I want to upgrade BigRentz.Galapagos and BigRentz.Kilimanjaro to use t
 
 The goal of this codemod is to replace `<input type="text" ... />` with `<CZInputText />`.
 
+## Inspiration
+
+- https://www.codeshiftcommunity.com/docs/react/
+
 Sample taken from https://www.saltycrane.com/blog/2021/05/simple-codemod-example-jscodeshift/
 
 > This example removes the React JSX element <MyHeader /> and removes the MyHeader import.
