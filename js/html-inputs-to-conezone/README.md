@@ -17,3 +17,9 @@ jscodeshift -t ~/stevus/codeshift/js/html-inputs-to-conezone/html-input-text-to-
 ```
 jscodeshift -t ~/stevus/codeshift/js/html-inputs-to-conezone/html-input-checkbox-to-czcheckbox/index.js .
 ```
+
+### Convert HTML textarea to CZTextarea
+
+```
+jscodeshift -t ~/stevus/codeshift/js/html-inputs-to-conezone/html-textarea-to-cztextarea/index.js .
+```
