@@ -29,3 +29,9 @@ jscodeshift -t ~/stevus/codeshift/js/html-inputs-to-conezone/html-textarea-to-cz
 ```
 jscodeshift -t ~/stevus/codeshift/js/html-inputs-to-conezone/html-button-to-czbutton/index.js .
 ```
+
+### Convert HTML select to CZSelect
+
+```
+jscodeshift -t ~/stevus/codeshift/js/html-inputs-to-conezone/html-select-to-czselect/index.js .
+```
