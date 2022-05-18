@@ -35,5 +35,17 @@ module.exports = (file, api, options) => {
     )
     .remove(); // Remove the `type="text"` prop
 
+  const inputTextNodesAttributes = inputTextNodes
+    .forEach((path) => {
+      path.value.openingElement.name.name = "CZInputText";
+    })
+    .find(j.JSXAttribute);
+
+  inputTextNodesAttributes
+    .filter((path) => path.node.name.name === "readOnly")
+    .forEach((path) => {
+      path.node.name.name = "isReadOnly";
+    });
+
   return root.toSource(printOptions);
 };
