@@ -1,0 +1,11 @@
+{
+  "name": "stevus-codeshift-js",
+  "scripts": {},
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/cli": "^7.1.6",
+    "@babel/plugin-syntax-jsx": "^7.16.0",
+    "recast": "^0.21.1",
+    "jscodeshift": "^0.13.1"
+  }
+}

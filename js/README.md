@@ -4,3 +4,5 @@
 - https://github.com/benjamn/ast-types/blob/dfb7b2e00b6fbf6347eafd09c3c3d88963921d73/def/core.ts
 - https://doc.esdoc.org/github.com/mason-lang/esast/
 - https://nicedoc.io/cpojer/js-codemod#user-content-rm-object-assign
+- https://lihautan.com/step-by-step-guide-for-writing-a-babel-transformation/
+- https://github.com/facebook/jscodeshift#unit-testing

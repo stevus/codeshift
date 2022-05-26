@@ -1,0 +1,8 @@
+{
+  "parserOpts": {
+    "parser": "recast"
+  },
+  "generatorOpts": {
+    "generator": "recast"
+  }
+}
