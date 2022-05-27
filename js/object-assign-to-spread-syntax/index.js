@@ -1,7 +1,6 @@
-// REVIEW: This is probably just needed for testing
-// const wrapBabelTransformAsJsCodeShift = require('../wrapBabelTransformAsJsCodeShift')
+import wrapBabelTransformAsJsCodeShift from '../wrapBabelTransformAsJsCodeShift'
 
-function transform (babel) {
+const transform = (babel) => {
   const buildObjectExpression = (nodes, iv) =>
     babel.types.objectExpression(
       nodes.reduce((allProperties, next) => {
@@ -19,10 +18,37 @@ function transform (babel) {
           path.node.callee.object.name === "Object" &&
           path.node.callee.property.name === "assign"
         ) {
-          if (
+          if(
             typeof path.node.arguments !== "undefined" &&
             path.node.arguments.length > 0 &&
+            path.node.arguments[0].type === "NewExpression"
+          ) {
+            // See testInputs/10.js
+            return
+          }
+
+          const isFirstArgumentAnIdentifier = typeof path.node.arguments !== "undefined" &&
+            path.node.arguments.length > 0 &&
             path.node.arguments[0].type === "Identifier"
+
+          // See testInputs/9.js
+          const isContainerConditionalExpression = path.container.type === 'ConditionalExpression'
+
+          // See testInputs/12.js
+          const isContainerReturnStatement = path.container.type === 'ReturnStatement'
+
+          // See testInputs/13.js
+          const isContainerVariableDeclarator = path.container.type === 'VariableDeclarator'
+
+          // See testInputs/14.js
+          const isContainerArrowFunctionExpression = path.container.type === 'ArrowFunctionExpression'
+
+          if (
+            isFirstArgumentAnIdentifier === true
+            && isContainerConditionalExpression !== true
+            && isContainerReturnStatement !== true
+            && isContainerVariableDeclarator !== true
+            && isContainerArrowFunctionExpression !== true
           ) {
             const [identifierNode, ...remNodes] = path.node.arguments;
             const newPath = babel.types.expressionStatement(
@@ -43,11 +69,10 @@ function transform (babel) {
               buildObjectExpression(path.node.arguments, [])
             );
           }
-          path.skip();
         }
       }
     }
   };
 }
 
-module.exports = transform
+export default wrapBabelTransformAsJsCodeShift(transform)

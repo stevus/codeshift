@@ -1,11 +1,11 @@
-const {
+import {
   parse,
   print
-} = require('recast')
-const { transformFromAstSync } = require('@babel/core')
+} from 'recast'
+import { transformFromAstSync } from '@babel/core'
 
 // Inspired from https://egghead.io/blog/codemods-with-babel-plugins
-function babelRecast(code) {
+const babelRecast = (code, filePath, transformFn) => {
   const ast = parse(code, {
     parser: require('recast/parsers/babel')
   })
@@ -13,16 +13,21 @@ function babelRecast(code) {
     cloneInputAst: false,
     code: false,
     ast: true,
-    plugins: [transformFn],
+    plugins: [
+      `@babel/plugin-syntax-jsx`,
+      transformFn
+    ],
   }
   const { ast: transformedAST } = transformFromAstSync(ast, code, options)
   const result = print(transformedAST).code
   return result
 }
 
-module.exports = function (transformFn) {
-
-  return function (file) {
-    return babelRecast(file.source, file.path)
-  }
+const wrapBabelTransformAsJsCodeShift = (transformFn) => (file) => {
+  return babelRecast(
+    file.source,
+    file.path,
+    transformFn)
 }
+
+export default wrapBabelTransformAsJsCodeShift

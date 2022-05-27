@@ -4,10 +4,10 @@ const transform = require('./index')
 const path = require('path')
 
 const inputDataGlobs = [
-    path.join(__dirname, '/input-*.js'),
+    path.join(__dirname, '/testInputs/*.js'),
 ]
 const expectedOutputDataGlobs = [
-    path.join(__dirname, '/expected-*.js'),
+    path.join(__dirname, '/testOutputs/*.js'),
 ]
 const inputDataFiles = glob.sync(inputDataGlobs)
 const expectedOutputDataFiles = glob.sync(expectedOutputDataGlobs)
@@ -16,7 +16,6 @@ inputDataFiles.forEach((inputFileName, i) => {
     const testNumber = inputFileName
       .split('/')[inputFileName.split('/').length - 1]
       .split('.')[0]
-      .split('-')[1]
 
     const inputFile = fs.readFileSync(
       inputFileName,
@@ -26,6 +25,8 @@ inputDataFiles.forEach((inputFileName, i) => {
       expectedOutputDataFiles[i],
       'utf8'
     )
+
+    // REVIEW: Compare the filenames to make sure numbers match up?
 
     // TODO: Compare the two here
 })
