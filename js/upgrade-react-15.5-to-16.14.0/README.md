@@ -11,17 +11,18 @@
 npm i --save react@16.14.0 react-dom@16.14.0
 
 // Rename unsafe React lifecycle methods
-jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/rename-unsafe-lifecycles.js .
+jscodeshift -t ~/stevus/react-codemod/transforms/rename-unsafe-lifecycles.js .
 
-// Convert react/lib/update to immutability-helper
+// Convert immutability-helper to immutability-helper
+ag "immutability-helper" .
 npm i --save immutability-helper@3.1.1
 ```
 
-Change all react/lib/update callsites to `const update = require('immutability-helper')`
+Change all immutability-helper callsites to `const update = require('immutability-helper')`
 
 Someday when I get this working, use this instead of the 3rd party immutability module:
 ```
-// Run codemod to remove "react/lib/update" npm module
-// Run codemod to transform "react/lib/update" callsites to object spread
+// Run codemod to remove "immutability-helper" npm module
+// Run codemod to transform "immutability-helper" callsites to object spread
 //jscodeshift -t ~/stevus/codeshift/js/upgrade-react-15.5-to-16.14.0/ConvertReactLibUpdate.js .
 ```

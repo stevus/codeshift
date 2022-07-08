@@ -5,6 +5,15 @@
 
 ## Process
 
+### Ensure react-codemod is checked out
+
+- https://github.com/reactjs/react-codemod
+
+```
+pushd ~/stevus/
+git clone https://github.com/reactjs/react-codemod
+```
+
 ### Converting "react/lib/cx" to classnames (if necessary)
 
 ```
@@ -16,7 +25,13 @@ npm i --save classnames@2.2.3
 jscodeshift -t ~/stevus/codeshift/js/upgrade-react-0.13.3-to-0.14/ConvertReactLibCx.js .
 ```
 
-### Converting "react/lib/keyMirror" to classnames (if necessary)
+Find any `React.addons.classSet` assignments and clean up
+
+```
+ag "React.addons.classSet" .
+```
+
+### Converting "react/lib/keyMirror" to keymirror (if necessary)
 
 ```
 ag "react/lib/keyMirror" .
@@ -32,12 +47,12 @@ i.e.
 module.exports = React.createClass({...})
 ```
 
-### Upgrading React
+### Upgrading React 0.13.3 to 0.14.0
 
 ```
 // Remove any `window.React = React` in the main application JS file
 
-jscodeshift -t ~/stevus/react-codemod/react-codemod/transforms/react-to-react-dom.js .
+jscodeshift -t ~/stevus/react-codemod/transforms/react-to-react-dom.js .
 
 jscodeshift -t ~/stevus/codeshift/js/upgrade-react-0.13.3-to-0.14/ConvertFindDOMNode.js .
 

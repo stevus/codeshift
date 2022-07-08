@@ -1,4 +1,4 @@
-const { classNames } = require('@bigengineerz/cone-zone/CZClassName')
+import classNames from 'classnames'
 import React from 'react'
 
 const Component1 = (p) => (
