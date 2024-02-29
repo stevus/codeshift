@@ -14,7 +14,7 @@ const babelRecast = (code, filePath, transformFn) => {
     code: false,
     ast: true,
     plugins: [
-      `@babel/plugin-syntax-jsx`,
+      // `@babel/plugin-syntax-jsx`,
       transformFn
     ],
   }

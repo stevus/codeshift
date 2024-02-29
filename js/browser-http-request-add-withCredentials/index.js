@@ -1,4 +1,6 @@
-export default function (babel) {
+import wrapBabelTransformAsJsCodeShift from '../wrapBabelTransformAsJsCodeShift'
+
+const transform = (babel) => {
   return {
     visitor: {
       ObjectExpression(path) {
@@ -13,9 +15,11 @@ export default function (babel) {
         }
 
         path.replaceWith(
-          babel.types.objectExpression([...path.node.properties, babel.types.objectProperty(babel.types.identifier("withCredentials"), babel.types.stringLiteral("value"))])
+          babel.types.objectExpression([...path.node.properties, babel.types.objectProperty(babel.types.identifier("withCredentials"), babel.types.booleanLiteral(true))])
         );
       }
     }
   };
 }
+
+export default wrapBabelTransformAsJsCodeShift(transform)
