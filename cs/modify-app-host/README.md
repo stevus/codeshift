@@ -3,5 +3,5 @@ Implement Ory Keto AuthZ for BigRentz.LIFT
 
 ```
 dotnet tool install -g dotnet-script
-dotnet script ~/stevus/codeshift/cs/add-configuration-fields/Codemod.csx -- --root="/path/to/your/repo"
+dotnet script ~/stevus/codeshift/cs/modify-app-host/Codemod.csx -- --root="/path/to/your/repo" --write
 ```
